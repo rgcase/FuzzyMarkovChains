@@ -42,14 +42,25 @@ object test {;import org.scalaide.worksheet.runtime.library.WorksheetSupport._; 
       Vector(0.3333333333333333,0.0, 0.0, 0.3333333333333333, 0.0, 0.0, 0.3333333333333333, 0.0, 0.0, 0.0),
       Vector(0.0, 0.2, 0.2, 0.2, 0.0, 0.0, 0.2, 0.0, 0.2, 0.0),
       Vector(0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0)
-      );System.out.println("""test1  : main.scala.com.rgcase.fuzzymarkovchains.test.Matrix[Double] = """ + $show(test1 ));$skip(73); 
+      );System.out.println("""test1  : main.scala.com.rgcase.fuzzymarkovchains.test.Matrix[Double] = """ + $show(test1 ));$skip(437); 
 
-  val mat = Vector(
-  						Vector(1.0, 2.0),
-  						Vector(3.0, 4.0));System.out.println("""mat  : scala.collection.immutable.Vector[scala.collection.immutable.Vector[Double]] = """ + $show(mat ));$skip(73); 
-  val testVec2 = Vector(Vector(1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0));System.out.println("""testVec2  : scala.collection.immutable.Vector[scala.collection.immutable.Vector[Double]] = """ + $show(testVec2 ));$skip(90); val res$0 = 
-  matrixMultWith(testVec2, test1, (x,y) => if (x<y) x else y, (x,y) => if (x>y) x else y);System.out.println("""res0: main.scala.com.rgcase.fuzzymarkovchains.test.Matrix[Double] = """ + $show(res$0))}
- }
+  def normalize(A: Matrix[Double]): Matrix[Double] = {
+    
+    if (A.length > 1) throw new IllegalArgumentException("normalize called with non-row vector")
+    
+    val row = A(0)
+    val (max, min): (Double, Double) = row.foldLeft((1.0,0.0)) {
+      (pair, x: Double) => (if (x > pair._1) x else pair._1, if (x > pair._2) pair._2 else x)
+    }
+    
+    Vector(row.map { x => if (max - min == 0.0) 0.0 else (x - min)/(max - min)})
+  };System.out.println("""normalize: (A: main.scala.com.rgcase.fuzzymarkovchains.test.Matrix[Double])main.scala.com.rgcase.fuzzymarkovchains.test.Matrix[Double]""");$skip(63); val res$0 = 
+  
+  normalize(matrixMultWith(testVec, test1, minT, probSumS));System.out.println("""res0: main.scala.com.rgcase.fuzzymarkovchains.test.Matrix[Double] = """ + $show(res$0))}
+  
+  
+  
+}
  
  
  

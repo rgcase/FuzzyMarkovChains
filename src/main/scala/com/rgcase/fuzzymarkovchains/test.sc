@@ -58,20 +58,27 @@ object test {
                                                   //| , Vector(0.0, 0.2, 0.2, 0.2, 0.0, 0.0, 0.2, 0.0, 0.2, 0.0), Vector(0.0, 0.0
                                                   //| , 0.0, 0.5, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0))
 
-  val mat = Vector(
-  						Vector(1.0, 2.0),
-  						Vector(3.0, 4.0))
-                                                  //> mat  : scala.collection.immutable.Vector[scala.collection.immutable.Vector[
-                                                  //| Double]] = Vector(Vector(1.0, 2.0), Vector(3.0, 4.0))
-  val testVec2 = Vector(Vector(1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0))
-                                                  //> testVec2  : scala.collection.immutable.Vector[scala.collection.immutable.Ve
-                                                  //| ctor[Double]] = Vector(Vector(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 
-                                                  //| 1.0))
-  matrixMultWith(testVec2, test1, (x,y) => if (x<y) x else y, (x,y) => if (x>y) x else y)
+  def normalize(A: Matrix[Double]): Matrix[Double] = {
+    
+    if (A.length > 1) throw new IllegalArgumentException("normalize called with non-row vector")
+    
+    val row = A(0)
+    val (max, min): (Double, Double) = row.foldLeft((1.0,0.0)) {
+      (pair, x: Double) => (if (x > pair._1) x else pair._1, if (x > pair._2) pair._2 else x)
+    }
+    
+    Vector(row.map { x => if (max - min == 0.0) 0.0 else (x - min)/(max - min)})
+  }                                               //> normalize: (A: main.scala.com.rgcase.fuzzymarkovchains.test.Matrix[Double])
+                                                  //| main.scala.com.rgcase.fuzzymarkovchains.test.Matrix[Double]
+  
+  normalize(matrixMultWith(testVec, test1, minT, probSumS))
                                                   //> res0: main.scala.com.rgcase.fuzzymarkovchains.test.Matrix[Double] = Vector(
-                                                  //| Vector(1.0, 0.3333333333333333, 0.5, 0.5, 0.5, 0.3333333333333333, 0.5, 0.3
-                                                  //| 333333333333333, 0.2, 0.3333333333333333))
- }
+                                                  //| Vector(0.40951, 0.271, 0.19, 0.5217031000000001, 0.1, 0.1, 0.3439, 0.1, 0.1
+                                                  //| 9, 0.19))
+  
+  
+  
+}
  
  
  
